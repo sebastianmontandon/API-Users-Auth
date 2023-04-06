@@ -10,16 +10,16 @@ router = APIRouter(prefix="/user",
                    responses={status.HTTP_404_NOT_FOUND: {"message": "Not found"}})
 
 
-@router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def add_user(user: User):
 
     if not email_format_check(user.email):
         raise HTTPException(
             status_code=status.HTTP_412_PRECONDITION_FAILED, detail="Email format not match")
 
-    if (type(search_user("username", user.username)) == User):
+    if (type(search_user("username", user.username)) == User or type(search_user("email", user.email)) == User):
         raise HTTPException(
-            status_code=status.HTTP_412_PRECONDITION_FAILED, detail="User already exist")
+            status_code=status.HTTP_412_PRECONDITION_FAILED, detail="User/Email already exist")
 
     hashed_password = pass_hasher(user.password)
     user.password = hashed_password
@@ -35,7 +35,7 @@ async def add_user(user: User):
 # Function
 def search_user(field: str, key):
     try:
-        user = users_schema(db_cliente.users.find_one({field, key}))
+        user = user_schema(db_cliente.users.find_one({field: key}))
         return User(**user)
     except:
         return {"error_message": "User not found"}
