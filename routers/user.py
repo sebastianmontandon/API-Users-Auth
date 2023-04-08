@@ -10,7 +10,7 @@ router = APIRouter(prefix="/user",
                    responses={status.HTTP_404_NOT_FOUND: {"message": "Not found"}})
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/",response_model=User, status_code=status.HTTP_201_CREATED)
 async def add_user(user: User):
 
     if not email_format_check(user.email):

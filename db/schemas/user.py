@@ -4,7 +4,8 @@ def user_schema(user) -> dict:
             "fullname": user["fullname"],
             "availability": user["availability"],
             "password": user["password"],
-            "email": user["email"]
+            "email": user["email"],
+            "domain": user["domain"]
             }
 
 def users_schema(users) -> list:

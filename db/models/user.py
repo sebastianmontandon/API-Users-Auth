@@ -8,3 +8,4 @@ class User(BaseModel):
     availability: Optional[bool]
     password: str
     email: str
+    domain: str
